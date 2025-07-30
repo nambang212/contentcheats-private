@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTENT CHEAT v71.2 (Planner) © Brata Hanggara Putra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #0D1120;
+            background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 22%, 0.2) 0px, transparent 50%), radial-gradient(at 97% 21%, hsla(212, 98%, 23%, 0.2) 0px, transparent 50%), radial-gradient(at 70% 94%, hsla(282, 98%, 23%, 0.2) 0px, transparent 50%), radial-gradient(at 10% 29%, hsla(282, 98%, 23%, 0.2) 0px, transparent 50%);
+            color: #E0E0E0;
+        }
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .modern-input, .modern-input-group, .edit-textarea {
+            background-color: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .modern-input:focus, .edit-textarea:focus {
+            outline: none; border-color: rgba(167, 139, 250, 0.8);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+        }
+        select.modern-input option { background: #0D1120; color: #E0E0E0; }
+        .modern-btn {
+            background: linear-gradient(90deg, #5F00D8, #A78BFA); border: none;
+            transition: all 0.3s ease; box-shadow: 0 4px 15px 0 rgba(167, 139, 250, 0.4);
+        }
+        .modern-btn:hover {
+            box-shadow: 0 6px 20px 0 rgba(167, 139, 250, 0.6); transform: translateY(-2px);
+        }
+        .modern-btn:disabled {
+            background: #374151; box-shadow: none;
+            cursor: not-allowed; transform: none;
+        }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;
+            z-index: 50; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content {
+            background-color: rgba(13, 17, 32, 0.8);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 1.5rem;
+            width: 90%; max-width: 600px; transform: scale(0.95); transition: transform 0.3s;
+            display: flex; flex-direction: column; max-height: 90vh;
+        }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-body { overflow-y: auto; padding-right: 1rem; }
+        .spinner {
+            width: 56px; height: 56px; border-radius: 50%; border: 9px solid;
+            border-color: #A78BFA; border-right-color: #374151; animation: spinner-d3wgkg 1s infinite linear;
+        }
+        .script-loading-spinner {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            border: 3px solid;
+            border-color: #A78BFA #A78BFA transparent;
+            animation:-rotate 1s linear infinite;
+        }
+        .script-loading-spinner:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            border: 3px solid;
+            border-color: transparent #374151 #374151;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            animation: rotate-reverse 0.5s linear infinite;
+        }
+        @keyframes spinner-d3wgkg { to { transform: rotate(1turn); } }
+        @keyframes -rotate { to { transform: rotate(360deg); } }
+        @keyframes rotate-reverse { to { transform: rotate(-360deg); } }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .shake { animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both; }
+        .info-box {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #a78bfa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .favorite-btn.favorited .star-icon { color: #facc15; }
+        .pustaka-entry .efektif-title, .faq-entry .efektif-title { color: #facc15; font-weight: 600;}
+        .script-section .saran-shot-text { color: #60a5fa !important; font-weight: 600; }
+        .hashtag {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .hashtag:hover { background-color: rgba(59, 130, 246, 0.4); }
+        .script-edit-view { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; }
+        .kerangka-konten-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #d8b4fe;
+        }
+        .kerangka-audio-section {
+            background: linear-gradient(135deg, rgba(126, 34, 206, 0.3) 0%, rgba(29, 78, 216, 0.2) 100%);
+            padding: 1rem;
+            border-radius: 0.75rem;
+        }
+        .result-card-copy-btn {
+            background-color: #4b5563;
+            color: #f3f4f6;
+            transition: background-color 0.2s;
+        }
+        .result-card-copy-btn:hover { background-color: #6b7280; }
+        .result-card-script-btn {
+            background: linear-gradient(90deg, #5F00D8, #A78BFA);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .result-card-script-btn:hover { box-shadow: 0 4px 15px 0 rgba(167, 139, 250, 0.4); }
+        .hook-label-container { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; }
+        .hook-label-dot { width: 8px; height: 8px; border-radius: 9999px; }
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: rgba(167, 139, 250, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #scrollToTopBtn:hover {
+             background-color: rgba(167, 139, 250, 1);
+        }
+        .tone-label {
+            background-color: rgba(209, 213, 219, 0.1);
+            color: #9ca3af;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 9999px;
+        }
+        .audio-suggestion {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+        .audio-suggestion:hover {
+            color: #c4b5fd;
+        }
+        .file-upload-btn {
+             background-color: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);
+             display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+             cursor: pointer; transition: all 0.3s ease;
+        }
+        .file-upload-btn:hover, .file-upload-btn.dragover {
+            border-color: rgba(167, 139, 250, 0.8);
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    </body>
+</html>
